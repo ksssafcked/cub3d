@@ -6,7 +6,7 @@
 /*   By: lsaiti <lsaiti@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/07 14:49:26 by lsaiti            #+#    #+#             */
-/*   Updated: 2025/01/07 19:15:04 by lsaiti           ###   ########.fr       */
+/*   Updated: 2025/01/09 17:24:35 by lsaiti           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -27,8 +27,9 @@
 typedef struct s_game
 {
 	struct s_map	*map;
-	int				length_max;
-	int				height_max;
+	struct s_player	*player;
+	size_t			length_max;
+	size_t			height_max;
 	unsigned int	color;
 	unsigned int	top_color;
 }					t_game;
@@ -39,6 +40,13 @@ typedef struct s_map
 	int				length;
 	struct s_map	*next;
 }					t_map;
+
+typedef struct s_player
+{
+	int				x;
+	int				y;
+	char			direction;
+}					t_player;
 
 typedef struct t_map_utils
 {
@@ -59,6 +67,6 @@ typedef struct t_map_utils
 
 t_game				*game_parser(char *file);
 void				*free_map(t_map *map);
-void	draw_map(t_map_utils *window, t_game *game);
+void				draw_map(t_map_utils *window, t_game *game);
 
 #endif

@@ -6,7 +6,7 @@
 /*   By: lsaiti <lsaiti@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/07 15:06:07 by lsaiti            #+#    #+#             */
-/*   Updated: 2025/01/07 19:22:30 by lsaiti           ###   ########.fr       */
+/*   Updated: 2025/01/09 17:18:42 by lsaiti           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -43,6 +43,7 @@ void	*free_map(t_map *map)
 void	parse_map(t_game *game, int fd)
 {
 	t_map	*map;
+	int		i;
 
 	map = malloc(sizeof(t_map));
 	game->map = map;
@@ -51,7 +52,7 @@ void	parse_map(t_game *game, int fd)
 	map->coor = get_next_line(fd);
 	if (!map->coor)
 		return ;
-	map->length = ft_strlen(map->coor) - 1;
+	game->length_max = ft_strlen(map->coor) - 1;
 	while (map->coor)
 	{
 		map->next = malloc(sizeof(t_map));
@@ -67,9 +68,18 @@ void	parse_map(t_game *game, int fd)
 			break;
 		}
 		map = map->next;
-		map->length = ft_strlen(map->coor) - 1;
+		if (game->length_max <  (ft_strlen(map->coor) - 1))
+			game->length_max = ft_strlen(map->coor) - 1;
 	}
 	map->next = NULL;
+	map = game->map;
+	i = 0;
+	while (map)
+	{
+		i++;
+		map = map->next;
+	}
+	game->height_max = i;
 	return ;
 }
 
@@ -84,6 +94,9 @@ t_game	*game_parser(char *file)
 	game = malloc(sizeof(t_game));
 	if (!game)
 		return (perror("malloc"), NULL);
+	game->player = malloc(sizeof(t_player));
+	if (!game->player)
+		return (free(game), perror("malloc"), NULL);
 	parse_map(game, fd);
 	close(fd);
 	if (!game->map)

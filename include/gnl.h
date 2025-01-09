@@ -6,7 +6,7 @@
 /*   By: lsaiti <lsaiti@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/07 15:28:39 by lsaiti            #+#    #+#             */
-/*   Updated: 2025/01/07 15:29:10 by lsaiti           ###   ########.fr       */
+/*   Updated: 2025/01/09 17:00:14 by lsaiti           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,7 +20,7 @@
 # include <string.h>
 
 # ifndef BUFFER_SIZE
-#  define BUFFER_SIZE 42
+#  define BUFFER_SIZE 800
 # endif
 
 typedef struct s_buffer
