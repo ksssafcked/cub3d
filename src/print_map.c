@@ -6,38 +6,215 @@
 /*   By: lsaiti <lsaiti@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/07 18:31:42 by lsaiti            #+#    #+#             */
-/*   Updated: 2025/01/09 17:19:27 by lsaiti           ###   ########.fr       */
+/*   Updated: 2025/01/11 15:07:25 by lsaiti           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../include/cub3d.h"
 
+
+t_point	rotate_x(t_point p, double angle)
+{
+	int	temp;
+
+	temp = p.y;
+	p.y = (cos(angle) * temp) + (-sin(angle) * p.z);
+	p.z = (sin(angle) * temp) + (cos(angle) * p.z);
+	return (p);
+}
+
+t_point	rotate_y(t_point p, double angle)
+{
+	int	temp;
+
+	temp = p.x;
+	p.x = (cos(angle) * temp) + (sin(angle) * p.z);
+	p.z = (-sin(angle) * temp) + (cos(angle) * p.z);
+	return (p);
+}
+
+t_point	rotate_z(t_point p, double angle)
+{
+	int	temp;
+
+	temp = p.x;
+	p.x = (cos(angle) * temp) + (-sin(angle) * p.y);
+	p.y = (sin(angle) * temp) + (cos(angle) * p.y);
+	return (p);
+}
+
+t_point	iso(t_game *game, t_point p, int far)
+{
+	double	angle;
+
+	angle = asin(1 / sqrt(3));
+	p.x *= (far);
+	p.y *= (far);
+	p.z *= (far);
+	p = rotate_x(p, angle);
+	p = rotate_y(p, -0.785398);
+	p.x += ((game->length_max * far) / 2);
+	p.y += (HEIGHT / 2) - (game->height_max * far) / 2;
+	return (p);
+}
+
+
+void	put_pixel_to_image(t_map_utils *fdf, t_point p)
+{
+	int	pixel_index;
+
+	// printf("x = %d, y = %d\n", p.x, p.y);
+	if (p.x >= 0 && p.y >= 0 && p.x < LENGTH && p.y < HEIGHT)
+	{
+		pixel_index = (p.y * fdf->size_line) + (p.x * (fdf->bpp / 8));
+		fdf->img_data[pixel_index] = p.color & 0xFF;
+		fdf->img_data[pixel_index + 1] = (p.color >> 8) & 0xFF;
+		fdf->img_data[pixel_index + 2] = (p.color >> 16) & 0xFF;
+	}
+}
+
+void	bresenheim(t_map_utils *fdf, t_point start, t_point end, t_vector v)
+{
+	while (1)
+	{
+		put_pixel_to_image(fdf, start);
+		if (start.x == end.x && start.y == end.y)
+			return ;
+		v.e2 = v.err * 2;
+		if (v.e2 > -v.dy)
+		{
+			v.err -= v.dy;
+			start.x += v.sx;
+		}
+		if (v.e2 < v.dx)
+		{
+			v.err += v.dx;
+			start.y += v.sy;
+		}
+	}
+}
+
+void	draw_line(t_map_utils *fdf, t_point start, t_point end)
+{
+	t_vector	v;
+
+	v.dx = abs(end.x - start.x);
+	v.dy = abs(end.y - start.y);
+	if (start.x < end.x)
+		v.sx = 1;
+	else
+		v.sx = -1;
+	if (start.y < end.y)
+		v.sy = 1;
+	else
+		v.sy = -1;
+	v.err = v.dx - v.dy;
+	bresenheim(fdf, start, end, v);
+}
+
+// void	draw_map(t_map_utils *window, t_game *game)
+// {
+// 	t_map	*map;
+// 	// int		height;
+// 	int		i;
+// 	int		j;
+// 	t_point a;
+// 	t_point	b;
+
+// 	map = (t_map*)(game->map);
+// 	j = 0;
+// 	while (map)
+// 	{
+// 		i = 0;
+// 		while (map->coor[i])
+// 		{
+// 			if (map->coor[i] == '1')
+// 			{
+// 				a.x = i;
+// 				a.y = j;
+// 				a.z = 0;
+// 				b.x = i;
+// 				b.y = j;
+// 				b.z = 10;
+// 				a = iso(game, a, 20);
+// 				a.color = 0xFFFF00FF;
+// 				b.color = 0xFFFF00FF;
+// 				b = iso(game, b, 20);
+// 				// printf("x = %d, y = %d\n", a.x, b.y);
+// 				// mlx_pixel_put(window->mlx, window->window, a.x, a.y, 0xFFFFFFFF);
+// 				// mlx_pixel_put(window->mlx, window->window, b.x, b.y, 0xFFFFFFFF);
+// 				draw_line(window, a, b);
+// 			}
+// 				// mlx_pixel_put(window->mlx, window->window, (int)(i * (LENGTH / game->length_max)) + ((LENGTH / game->length_max) / 2), j * ((HEIGHT / game->height_max)) + ((HEIGHT / game->height_max) / 2), 0xFFFFFFFF);
+// 			// else if (map->coor[i] == 'N' || map->coor[i] == 'W' || map->coor[i] == 'S' || map->coor[i] == 'E')
+// 			// {
+// 			// 	game->player->x = i;
+// 			// 	game->player->y = j;
+// 			// 	game->player->direction = map->coor[i];
+// 			// 	mlx_pixel_put(window->mlx, window->window, (int)(i * (LENGTH / game->length_max)) + ((LENGTH / game->length_max) / 2), j * ((HEIGHT / game->height_max)) + ((HEIGHT / game->height_max) / 2), 0xFFFF00FF);
+// 			// }
+// 			// else if (map->coor[i] == '0')
+// 			// 	mlx_pixel_put(window->mlx, window->window, (int)(i * (LENGTH / game->length_max)) + ((LENGTH / game->length_max) / 2), j * ((HEIGHT / game->height_max)) + ((HEIGHT / game->height_max) / 2), 0x0000FFFF);
+// 			i++;
+// 		}
+// 		map = map->next;
+// 		j++;
+// 	}
+// }
+
+
+t_point	normalise(t_game *game, t_point p, int far)
+{
+	p.x *= (far);
+	p.y *= (far);
+	p.z *= (far);
+	p.x += ((game->length_max * far) / 2);
+	// p.y += (HEIGHT / 2) - (game->height_max * far) / 2;
+	return (p);
+}
+
 void	draw_map(t_map_utils *window, t_game *game)
 {
-	t_map	*map;
-	// int		height;
-	int		i;
-	int		j;
+	char	**map;
+	int	i;
+	int	j;
+	t_point a;
+	t_point	b;
 
-	map = (t_map*)(game->map);
-	j = 0;
-	while (map)
+	i = 0;
+	(void)game;
+	map = window->map;
+	while (map[i])
 	{
-		i = 0;
-		while (map->coor[i])
+		j = 0;
+		while(map[i][j])
 		{
-			if (map->coor[i] == '1')
-				mlx_pixel_put(window->mlx, window->window, (int)(i * (LENGTH / game->length_max)) + ((LENGTH / game->length_max) / 2), j * ((HEIGHT / game->height_max)) + ((HEIGHT / game->height_max) / 2), 0xFFFFFF);
-			else if (map->coor[i] == 'N' || map->coor[i] == 'W' || map->coor[i] == 'S' || map->coor[i] == 'E')
+			if (map[i][j] == '1' && map[i][j + 1] && map[i][j + 1] == '1')
 			{
-				game->player->x = i;
-				game->player->y = j;
-				game->player->direction = map->coor[i];
-				mlx_pixel_put(window->mlx, window->window, (int)(i * (LENGTH / game->length_max)) + ((LENGTH / game->length_max) / 2), j * ((HEIGHT / game->height_max)) + ((HEIGHT / game->height_max) / 2), 0xFF00FF);
+				a.x = j;
+				a.y = i;
+				b.x = j + 1;
+				b.y = i;
+				a.color = 0xFFFF00FF;
+				b.color = 0xFFFF00FF;
+				a = normalise(game, a, 15);
+				b = normalise(game, b, 15);
+				draw_line(window, a, b);
 			}
-			i++;
+			if (map[i + 1] && map[i][j] == '1' && map[i + 1][j] == '1')
+			{
+				a.x = j;
+				a.y = i;
+				b.x = j;
+				b.y = i + 1;
+				a.color = 0xFFFF00FF;
+				b.color = 0xFFFF00FF;
+				a = normalise(game, a, 15);
+				b = normalise(game, b, 15);
+				draw_line(window, a, b);
+			}
+			j++;
 		}
-		map = map->next;
-		j++;
+		i++;
 	}
 }

@@ -6,7 +6,7 @@
 /*   By: lsaiti <lsaiti@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/07 14:49:26 by lsaiti            #+#    #+#             */
-/*   Updated: 2025/01/09 17:24:35 by lsaiti           ###   ########.fr       */
+/*   Updated: 2025/01/11 14:11:47 by lsaiti           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -48,20 +48,42 @@ typedef struct s_player
 	char			direction;
 }					t_player;
 
+typedef struct s_point
+{
+	int		x;
+	int		y;
+	int		z;
+	int		color;
+	int		error;
+}			t_point;
+
+typedef struct s_vector
+{
+	int		dx;
+	int		dy;
+	int		sx;
+	int		sy;
+	int		err;
+	int		e2;
+}			t_vector;
+
 typedef struct t_map_utils
 {
-	int				height;
-	int				width;
-	void			*mlx;
-	void			*window;
-	void			*img;
-	char			*img_data;
-	int				bpp;
-	int				size_line;
-	int				endian;
-	int				far;
+	char	**map;
+	t_point	**point;
+	t_point	*start;
+	int		height;
+	int		width;
+	void	*mlx;
+	void	*window;
+	void	*img;
+	char	*img_data;
+	int		bpp;
+	int		size_line;
+	int		endian;
+	int		far;
 	struct s_game	*game;
-}					t_map_utils;
+}			t_map_utils;
 
 /*		parser.c	*/
 
