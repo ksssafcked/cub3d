@@ -6,7 +6,7 @@
 /*   By: lsaiti <lsaiti@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/07 14:49:26 by lsaiti            #+#    #+#             */
-/*   Updated: 2025/01/11 14:11:47 by lsaiti           ###   ########.fr       */
+/*   Updated: 2025/01/11 16:07:39 by lsaiti           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,8 +19,9 @@
 # include <math.h>
 # include <stdio.h>
 # include <unistd.h>
-# define LENGTH 800
-# define HEIGHT 600
+# include <X11/keysym.h>
+# define LENGTH 1024
+# define HEIGHT 720
 
 /*		structs		*/
 

@@ -6,7 +6,7 @@
 /*   By: lsaiti <lsaiti@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/07 18:31:42 by lsaiti            #+#    #+#             */
-/*   Updated: 2025/01/11 15:07:25 by lsaiti           ###   ########.fr       */
+/*   Updated: 2025/01/11 15:50:38 by lsaiti           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -112,64 +112,14 @@ void	draw_line(t_map_utils *fdf, t_point start, t_point end)
 	bresenheim(fdf, start, end, v);
 }
 
-// void	draw_map(t_map_utils *window, t_game *game)
-// {
-// 	t_map	*map;
-// 	// int		height;
-// 	int		i;
-// 	int		j;
-// 	t_point a;
-// 	t_point	b;
-
-// 	map = (t_map*)(game->map);
-// 	j = 0;
-// 	while (map)
-// 	{
-// 		i = 0;
-// 		while (map->coor[i])
-// 		{
-// 			if (map->coor[i] == '1')
-// 			{
-// 				a.x = i;
-// 				a.y = j;
-// 				a.z = 0;
-// 				b.x = i;
-// 				b.y = j;
-// 				b.z = 10;
-// 				a = iso(game, a, 20);
-// 				a.color = 0xFFFF00FF;
-// 				b.color = 0xFFFF00FF;
-// 				b = iso(game, b, 20);
-// 				// printf("x = %d, y = %d\n", a.x, b.y);
-// 				// mlx_pixel_put(window->mlx, window->window, a.x, a.y, 0xFFFFFFFF);
-// 				// mlx_pixel_put(window->mlx, window->window, b.x, b.y, 0xFFFFFFFF);
-// 				draw_line(window, a, b);
-// 			}
-// 				// mlx_pixel_put(window->mlx, window->window, (int)(i * (LENGTH / game->length_max)) + ((LENGTH / game->length_max) / 2), j * ((HEIGHT / game->height_max)) + ((HEIGHT / game->height_max) / 2), 0xFFFFFFFF);
-// 			// else if (map->coor[i] == 'N' || map->coor[i] == 'W' || map->coor[i] == 'S' || map->coor[i] == 'E')
-// 			// {
-// 			// 	game->player->x = i;
-// 			// 	game->player->y = j;
-// 			// 	game->player->direction = map->coor[i];
-// 			// 	mlx_pixel_put(window->mlx, window->window, (int)(i * (LENGTH / game->length_max)) + ((LENGTH / game->length_max) / 2), j * ((HEIGHT / game->height_max)) + ((HEIGHT / game->height_max) / 2), 0xFFFF00FF);
-// 			// }
-// 			// else if (map->coor[i] == '0')
-// 			// 	mlx_pixel_put(window->mlx, window->window, (int)(i * (LENGTH / game->length_max)) + ((LENGTH / game->length_max) / 2), j * ((HEIGHT / game->height_max)) + ((HEIGHT / game->height_max) / 2), 0x0000FFFF);
-// 			i++;
-// 		}
-// 		map = map->next;
-// 		j++;
-// 	}
-// }
-
-
 t_point	normalise(t_game *game, t_point p, int far)
 {
 	p.x *= (far);
 	p.y *= (far);
 	p.z *= (far);
-	p.x += ((game->length_max * far) / 2);
-	// p.y += (HEIGHT / 2) - (game->height_max * far) / 2;
+	(void)game;
+	p.x += LENGTH / 2 - (game->length_max * far) / 2;
+	p.y += (HEIGHT / 2) - (game->height_max * far) / 2;
 	return (p);
 }
 
@@ -217,4 +167,9 @@ void	draw_map(t_map_utils *window, t_game *game)
 		}
 		i++;
 	}
+	a.x = game->player->x;
+	a.y = game->player->y;
+	a.color = 0xFF00FFFF;
+	a = normalise(game, a, 15);
+	put_pixel_to_image(window, a);
 }

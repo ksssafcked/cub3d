@@ -6,7 +6,7 @@
 /*   By: lsaiti <lsaiti@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/07 14:53:22 by lsaiti            #+#    #+#             */
-/*   Updated: 2025/01/11 14:41:12 by lsaiti           ###   ########.fr       */
+/*   Updated: 2025/01/11 16:14:41 by lsaiti           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -56,14 +56,42 @@ int	close_all(t_map_utils *fdf)
 	exit(0);
 }
 
+int change_dir(int keycode, t_map_utils *fdf)
+{
+	if (keycode == XK_w || keycode == XK_W)
+    {
+		fdf->game->player->y -= 1;
+    }
+    else if (keycode == XK_s || keycode == XK_S)
+    {
+    	fdf->game->player->y += 1;
+    }
+    else if (keycode == XK_d || keycode == XK_D)
+    {
+        fdf->game->player->x += 1;
+    }
+    else if (keycode == XK_a || keycode == XK_A)
+    {
+        fdf->game->player->x -= 1;
+    }
+	else
+		return (0);
+	draw_map(fdf, fdf->game);
+	mlx_clear_window(fdf->mlx, fdf->window);
+	mlx_put_image_to_window(fdf->mlx, fdf->window, fdf->img, 0, 0);
+	return (0);
+}
+
 int	handle(int keycode, t_map_utils *fdf)
 {
 	if (keycode == 65307)
 		close_all(fdf);
+	else
+		change_dir(keycode, fdf);
 	return (0);
 }
 
-char	*strcpy_no_nl(char *source, char *dest)
+char	*strcpy_no_nl(t_game *game, char *source, char *dest)
 {
 	int	i;
 
@@ -73,11 +101,39 @@ char	*strcpy_no_nl(char *source, char *dest)
 		if (source[i] == '1')
 			dest[i] = source[i];
 		else
+		{
+			if (source[i] == 'N' || source[i] == 'W' || source[i] == 'S' || source[i] == 'E')
+				game->player->direction = source[i];
 			dest[i] = '0';
+		}
 		i++;
 	}
 	dest[i] = '\0';
 	return (dest);
+}
+
+void	get_player_pos(t_game *game)
+{
+	t_map *current = game->map;
+	int	i;
+	int	j;
+
+	j = 0;
+	while (current)
+	{
+		i = 0;
+		while (current->coor[i])
+		{
+			if (current->coor[i] == 'N' || current->coor[i] == 'W' || current->coor[i] == 'S' || current->coor[i] == 'E')
+			{
+				game->player->x = i;
+				game->player->y = j;
+			}
+			i++;
+		}
+		current = current->next;
+		j++;
+	}
 }
 
 char	**get_full_map(t_game *game)
@@ -90,10 +146,11 @@ char	**get_full_map(t_game *game)
 	if (!map)
 		return (NULL);
 	i = 0;
+	get_player_pos(game);
 	while (current)
 	{
 		map[i] = malloc(sizeof(char) * (game->length_max + 1));
-		map[i] = strcpy_no_nl(current->coor, map[i]);
+		map[i] = strcpy_no_nl(game, current->coor, map[i]);
 		i++;
 		current = current->next;
 	}
