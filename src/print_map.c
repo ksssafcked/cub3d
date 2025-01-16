@@ -6,7 +6,7 @@
 /*   By: lsaiti <lsaiti@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/07 18:31:42 by lsaiti            #+#    #+#             */
-/*   Updated: 2025/01/11 15:50:38 by lsaiti           ###   ########.fr       */
+/*   Updated: 2025/01/15 16:34:15 by lsaiti           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -63,7 +63,6 @@ void	put_pixel_to_image(t_map_utils *fdf, t_point p)
 {
 	int	pixel_index;
 
-	// printf("x = %d, y = %d\n", p.x, p.y);
 	if (p.x >= 0 && p.y >= 0 && p.x < LENGTH && p.y < HEIGHT)
 	{
 		pixel_index = (p.y * fdf->size_line) + (p.x * (fdf->bpp / 8));
@@ -123,6 +122,66 @@ t_point	normalise(t_game *game, t_point p, int far)
 	return (p);
 }
 
+void	draw_background(t_map_utils *window, t_game *game)
+{
+	int	x;
+	int	y;
+	int	color_floor;
+	int	color_ceil;
+	int	pixel_index;
+
+	color_floor = game->floor_color;
+	color_ceil = game->ceiling_color;
+	y = 0;
+	while (y < HEIGHT)
+	{
+		x = 0;
+		while (x < LENGTH)
+		{
+			pixel_index = (y * window->size_line) + (x * (window->bpp / 8));
+			if (y < HEIGHT / 2)
+			{
+				window->img_data[pixel_index + 0] = color_ceil & 0xFF;
+				window->img_data[pixel_index + 1] = (color_ceil >> 8) & 0xFF;
+				window->img_data[pixel_index + 2] = (color_ceil >> 16) & 0xFF;
+			}
+			else
+			{
+				window->img_data[pixel_index + 0] = color_floor & 0xFF;
+				window->img_data[pixel_index + 1] = (color_floor >> 8) & 0xFF;
+				window->img_data[pixel_index + 2] = (color_floor >> 16) & 0xFF;
+			}
+			x++;
+		}
+		y++;
+	}
+}
+
+t_point	get_player_point(t_game *game, double x, double y, int far)
+{
+	t_point p;
+
+	x *= (far);
+	y *= (far);
+	x += LENGTH / 2 - (game->length_max * far) / 2;
+	y += (HEIGHT / 2) - (game->height_max * far) / 2;
+	p.x = (int)x;
+	p.y = (int)y;
+	return (p);
+}
+
+void	draw_player(t_map_utils *window, t_game *game)
+{
+	t_point a;
+	t_point b;
+
+	a = get_player_point(game, game->player->x, game->player->y, 15);
+	a.color = 0xFF00FFFF;
+	b = get_player_point(game, game->player->x + game->dirX, game->player->y + game->dirY, 15);
+	b.color = 0xFF00FFFF;
+	draw_line(window, a, b);
+}
+
 void	draw_map(t_map_utils *window, t_game *game)
 {
 	char	**map;
@@ -134,6 +193,7 @@ void	draw_map(t_map_utils *window, t_game *game)
 	i = 0;
 	(void)game;
 	map = window->map;
+	draw_background(window, game);
 	while (map[i])
 	{
 		j = 0;
@@ -167,9 +227,5 @@ void	draw_map(t_map_utils *window, t_game *game)
 		}
 		i++;
 	}
-	a.x = game->player->x;
-	a.y = game->player->y;
-	a.color = 0xFF00FFFF;
-	a = normalise(game, a, 15);
-	put_pixel_to_image(window, a);
+	draw_player(window, game);
 }

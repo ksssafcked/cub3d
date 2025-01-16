@@ -6,7 +6,7 @@
 /*   By: lsaiti <lsaiti@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/07 15:06:07 by lsaiti            #+#    #+#             */
-/*   Updated: 2025/01/10 17:51:24 by lsaiti           ###   ########.fr       */
+/*   Updated: 2025/01/15 13:12:21 by lsaiti           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -83,9 +83,58 @@ void	parse_map(t_game *game, int fd)
 	return ;
 }
 
+static int check_map_closed(t_game *game)
+{
+    t_map	*current;
+    int		i;
+	int		len;
+    int		row_index;
+
+	current = game->map;
+	row_index = 0;
+    if (!current || !current->coor)
+        return (0);
+    i = 0;
+    while (current->coor[i] && current->coor[i] != '\n')
+    {
+        if (current->coor[i] != '1' && current->coor[i] != '\0')
+            return (0);
+        i++;
+    }
+    while (current->next)
+    {
+        current = current->next;
+        row_index++;
+    }
+    i = 0;
+    while (current->coor[i] && current->coor[i] != '\n')
+    {
+        if (current->coor[i] != '1' && current->coor[i] != '\0')
+            return (0);
+        i++;
+    }
+    current = game->map;
+    row_index = 0;
+    while (current)
+    {
+        len = ft_strlen(current->coor);
+        if (len > 0 && current->coor[len - 1] == '\n')
+            len--;
+        if (len < 1)
+            return (0);
+        if (current->coor[0] != '1')
+            return (0);
+        if (current->coor[len - 1] != '1')
+            return (0);
+        current = current->next;
+        row_index++;
+    }
+    return (1);
+}
+
 t_game	*game_parser(char *file)
 {
-	int	fd;
+	int		fd;
 	t_game	*game;
 
 	fd = open(file, O_RDONLY);
@@ -94,6 +143,7 @@ t_game	*game_parser(char *file)
 	game = malloc(sizeof(t_game));
 	if (!game)
 		return (perror("malloc"), NULL);
+	ft_memset(game, 0, sizeof(t_game));
 	game->player = malloc(sizeof(t_player));
 	if (!game->player)
 		return (free(game), perror("malloc"), NULL);
@@ -101,6 +151,13 @@ t_game	*game_parser(char *file)
 	close(fd);
 	if (!game->map)
 		return (free(game), NULL);
-	// print_map(game->map);
+	if (!check_map_closed(game))
+	{
+		free_map(game->map);
+		free(game->player);
+		free(game);
+		fprintf(stderr, "Error\nMap is not closed/surrounded by walls.\n");
+		return (NULL);
+	}
 	return (game);
 }

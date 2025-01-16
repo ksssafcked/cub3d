@@ -6,7 +6,7 @@
 /*   By: lsaiti <lsaiti@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/21 14:42:49 by lsaiti            #+#    #+#             */
-/*   Updated: 2025/01/07 18:18:48 by lsaiti           ###   ########.fr       */
+/*   Updated: 2025/01/14 19:25:05 by lsaiti           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -57,4 +57,29 @@ char	*ft_strjoin(char *s1, char const *s2, long n)
 	}
 	str[i + j] = '\0';
 	return (free(s1), str);
+}
+
+void	free_split(char **split)
+{
+	int	i;
+
+	i = 0;
+	while (split && split[i])
+	{
+		free(split[i]);
+		i++;
+	}
+	free(split);
+}
+
+void	*ft_memset(void *str, int c, size_t n)
+{
+	unsigned char	*ptr;
+	size_t			i;
+
+	i = 0;
+	ptr = (unsigned char *)str;
+	while (n > i)
+		ptr[i++] = (unsigned char)c;
+	return (str);
 }

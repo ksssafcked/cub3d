@@ -44,5 +44,6 @@ char	*get_next_line_onebuff(int fd, t_string *s, t_buffer *b);
 void	*ft_freestr(char **str);
 size_t	ft_strlen(const char *s);
 char	*ft_strjoin(char *s1, char const *s2, long n);
+void	*ft_memset(void *str, int c, size_t n);
 
 #endif
