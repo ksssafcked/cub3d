@@ -6,7 +6,7 @@
 /*   By: lsaiti <lsaiti@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/07 14:49:26 by lsaiti            #+#    #+#             */
-/*   Updated: 2025/01/16 17:43:59 by lsaiti           ###   ########.fr       */
+/*   Updated: 2025/01/17 14:15:21 by lsaiti           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,8 +21,8 @@
 # include <stdio.h>
 # include <unistd.h>
 # include <X11/keysym.h>
-# define LENGTH 800
-# define HEIGHT 600
+# define LENGTH 1024
+# define HEIGHT 720
 
 /*		structs		*/
 
@@ -142,6 +142,7 @@ int					ft_strncmp(const char *s1, const char *s2, size_t n);
 size_t				ft_strlen(const char *str);
 char				*ft_strdup(const char *src);
 int					ft_atoi(const char *str);
+char				*ft_strchr(const char *str, int c);
 
 
 /*	   ft_split.c   */
@@ -151,8 +152,38 @@ void				free_split(char **split);
 
 /*    print_map.c   */
 
-void				draw_background(t_map_utils *window, t_game *game);
+int	close_all(t_map_utils *fdf);
 
 void				draw_3d_view(t_map_utils *fdf);
+
+
+
+
+
+/*		direction.h		*/
+int		change_dir(t_map_utils *fdf);
+int		is_wall(t_map_utils *fdf, double x, double y);
+
+
+/*		parser_utils.c	*/
+char	*strcpy_no_nl(t_game *game, char *source, char *dest, int size);
+void	printer_map(char **map);
+
+
+/*		get_info.c	*/
+double	get_angle(char c);
+void	get_player_pos(t_game *game);
+char	**get_full_map(t_game *game);
+
+/*		handle.c	*/
+int		close_all(t_map_utils *fdf);
+int		key_release(int keycode, t_map_utils *fdf);
+int		key_press(int keycode, t_map_utils *fdf);
+
+
+/*    print_map.c   */
+void	put_pixel_image(t_map_utils *window, int pixel_index, int color);
+void	draw_background(t_map_utils *window, t_game *game);
+
 
 #endif

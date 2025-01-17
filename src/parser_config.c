@@ -12,6 +12,16 @@
 
 #include "../include/cub3d.h"
 
+void trim_end(char **str) 
+{
+    size_t len = ft_strlen(*str);
+    while (len > 0 && ((*str)[len - 1] == '\n' || (*str)[len - 1] == ' '))
+	{
+        (*str)[len - 1] = '\0';
+        len--;
+    }
+}
+
 static int parse_texture(char *line, t_game *game)
 {
     char **split = ft_split(line, ' ');
@@ -22,31 +32,43 @@ static int parse_texture(char *line, t_game *game)
     }
     if (!ft_strcmp(split[0], "NO"))
     {
-        if (game->no_defined == 1)
-            return (free_split(split), 0);
+        if (game->no_defined == 1) {
+            free_split(split);
+            return 0;
+        }
         game->no_defined = 1;
         game->path_no = ft_strdup(split[1]);
+        trim_end(&game->path_no);
     }
     else if (!ft_strcmp(split[0], "SO"))
     {
-        if (game->so_defined == 1)
-            return (free_split(split), 0);
+        if (game->so_defined == 1) {
+            free_split(split);
+            return 0;
+        }
         game->so_defined = 1;
         game->path_so = ft_strdup(split[1]);
+        trim_end(&game->path_so);
     }
     else if (!ft_strcmp(split[0], "WE"))
     {
-        if (game->we_defined == 1)
-            return (free_split(split), 0);
+        if (game->we_defined == 1) {
+            free_split(split);
+            return 0;
+        }
         game->we_defined = 1;
         game->path_we = ft_strdup(split[1]);
+        trim_end(&game->path_we);
     }
     else if (!ft_strcmp(split[0], "EA"))
     {
-        if (game->ea_defined == 1)
-            return (free_split(split), 0);
+        if (game->ea_defined == 1) {
+            free_split(split);
+            return 0;
+        }
         game->ea_defined = 1;
         game->path_ea = ft_strdup(split[1]);
+        trim_end(&game->path_ea);
     }
     else
     {
@@ -56,6 +78,7 @@ static int parse_texture(char *line, t_game *game)
     free_split(split);
     return 1;
 }
+
 
 static int parse_color(char *line, t_game *game)
 {
