@@ -6,7 +6,7 @@
 /*   By: lsaiti <lsaiti@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/18 15:51:15 by lsaiti            #+#    #+#             */
-/*   Updated: 2025/01/18 15:51:41 by lsaiti           ###   ########.fr       */
+/*   Updated: 2025/01/18 19:18:33 by lsaiti           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,6 +23,8 @@ int	parse_north_south(char **split, t_game *game)
 		}
 		game->no_defined = 1;
 		game->path_no = ft_strdup(split[1]);
+		if (!game->path_no)
+			return (0);
 		trim_end(&game->path_no);
 	}
 	else if (!ft_strcmp(split[0], "SO"))
@@ -34,6 +36,8 @@ int	parse_north_south(char **split, t_game *game)
 		}
 		game->so_defined = 1;
 		game->path_so = ft_strdup(split[1]);
+		if (!game->path_so)
+			return (0);
 		trim_end(&game->path_so);
 	}
 	return (1);
@@ -50,6 +54,8 @@ int	parse_east_west(char **split, t_game *game)
 		}
 		game->we_defined = 1;
 		game->path_we = ft_strdup(split[1]);
+		if (!game->path_we)
+			return (0);
 		trim_end(&game->path_we);
 	}
 	else if (!ft_strcmp(split[0], "EA"))
@@ -61,6 +67,8 @@ int	parse_east_west(char **split, t_game *game)
 		}
 		game->ea_defined = 1;
 		game->path_ea = ft_strdup(split[1]);
+		if (!game->path_ea)
+			return (0);
 		trim_end(&game->path_ea);
 	}
 	return (1);

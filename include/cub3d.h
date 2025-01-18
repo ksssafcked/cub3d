@@ -6,7 +6,7 @@
 /*   By: lsaiti <lsaiti@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/07 14:49:26 by lsaiti            #+#    #+#             */
-/*   Updated: 2025/01/18 19:01:26 by lsaiti           ###   ########.fr       */
+/*   Updated: 2025/01/18 19:07:29 by lsaiti           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -188,36 +188,36 @@ void				free_split(char **split);
 
 /*    print_map.c   */
 
-int					close_all(t_map_utils *fdf);
+int					close_all(t_map_utils *cub);
 
-void				draw_3d_view(t_map_utils *fdf);
+void				draw_3d_view(t_map_utils *cub);
 
 /*		main.c		*/
-void				free_all(t_map_utils *fdf);
+void				free_all(t_map_utils *cub);
 
 /*		change.c	*/
 void				change_dist(t_view *view);
-void				change_side(t_map_utils *fdf, t_view *view);
+void				change_side(t_map_utils *cub, t_view *view);
 void				change_draw(t_view *view);
 void				change_values(t_view *view);
 void				change_wall(t_view *view);
 
 /*		raycasting.h	*/
-void				set_pixel_color(t_map_utils *fdf, int x, int y,
+void				set_pixel_color(t_map_utils *cub, int x, int y,
 						unsigned int color);
-void				init_player_pos(t_map_utils *fdf, t_view *view);
-void				draw_3d(t_map_utils *fdf, t_view *view);
-void				draw_3d_view(t_map_utils *fdf);
+void				init_player_pos(t_map_utils *cub, t_view *view);
+void				draw_3d(t_map_utils *cub, t_view *view);
+void				draw_3d_view(t_map_utils *cub);
 
 /*		init.c		*/
 t_map_utils			*map_init(void);
-void				init_image(t_map_utils *fdf);
-t_map_utils			*init_textures(t_map_utils *fdf);
-t_map_utils			*init_fdf(t_game *game);
+void				init_image(t_map_utils *cub);
+t_map_utils			*init_textures(t_map_utils *cub);
+t_map_utils			*init_cub(t_game *game);
 
 /*		direction.h		*/
-int					change_dir(t_map_utils *fdf);
-int					is_wall(t_map_utils *fdf, double x, double y);
+int					change_dir(t_map_utils *cub);
+int					is_wall(t_map_utils *cub, double x, double y);
 
 /*		parser_config.c		*/
 void				trim_end(char **str);
@@ -239,12 +239,12 @@ int					parse_texture(char *line, t_game *game);
 double				get_angle(char c);
 void				get_player_pos(t_game *game);
 char				**get_full_map(t_game *game);
-int					get_texture(t_map_utils *fdf, t_view *view);
+int					get_texture(t_map_utils *cub, t_view *view);
 
 /*		handle.c	*/
-int					close_all(t_map_utils *fdf);
-int					key_release(int keycode, t_map_utils *fdf);
-int					key_press(int keycode, t_map_utils *fdf);
+int					close_all(t_map_utils *cub);
+int					key_release(int keycode, t_map_utils *cub);
+int					key_press(int keycode, t_map_utils *cub);
 
 /*    print_map.c   */
 void				put_pixel_image(t_map_utils *window, int pixel_index,

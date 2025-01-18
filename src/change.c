@@ -6,7 +6,7 @@
 /*   By: lsaiti <lsaiti@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/18 15:45:52 by lsaiti            #+#    #+#             */
-/*   Updated: 2025/01/18 19:02:02 by lsaiti           ###   ########.fr       */
+/*   Updated: 2025/01/18 19:07:29 by lsaiti           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -38,7 +38,7 @@ void	change_dist(t_view *view)
 	}
 }
 
-void	change_side(t_map_utils *fdf, t_view *view)
+void	change_side(t_map_utils *cub, t_view *view)
 {
 	view->hit = 0;
 	while (view->hit == 0)
@@ -55,13 +55,13 @@ void	change_side(t_map_utils *fdf, t_view *view)
 			view->map_y += view->step_y;
 			view->side = 1;
 		}
-		if (view->map_x < 0 || (size_t)view->map_x >= fdf->game->length_max
-			|| view->map_y < 0 || (size_t)view->map_y >= fdf->game->height_max)
+		if (view->map_x < 0 || (size_t)view->map_x >= cub->game->length_max
+			|| view->map_y < 0 || (size_t)view->map_y >= cub->game->height_max)
 		{
 			view->hit = 1;
 			break ;
 		}
-		if (fdf->map[view->map_y][view->map_x] == '1')
+		if (cub->map[view->map_y][view->map_x] == '1')
 			view->hit = 1;
 	}
 }

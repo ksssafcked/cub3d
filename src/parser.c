@@ -6,7 +6,7 @@
 /*   By: lsaiti <lsaiti@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/07 15:06:07 by lsaiti            #+#    #+#             */
-/*   Updated: 2025/01/18 18:01:24 by lsaiti           ###   ########.fr       */
+/*   Updated: 2025/01/18 19:10:50 by lsaiti           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -181,6 +181,13 @@ char	*skip_config_lines(int fd, t_game *game)
 	return (line);
 }
 
+int	check_textures_defined(t_game *game)
+{
+	if (!game->no_defined || !game->so_defined || !game->we_defined || !game->ea_defined || !game->f_defined || !game->c_defined)
+		return (0);
+	return (1);
+}
+
 t_game	*game_parser(char *file)
 {
 	int		fd;
@@ -209,5 +216,7 @@ t_game	*game_parser(char *file)
 		fprintf(stderr, "Error\nMap is not closed/surrounded by walls.\n");
 		return (free_map(game->map), free(game->player), free(game), NULL);
 	}
+	if (!check_textures_defined(game))
+		return (free_map(game->map), free(game->player), free(game), NULL);
 	return (game);
 }
