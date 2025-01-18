@@ -6,7 +6,7 @@
 /*   By: lsaiti <lsaiti@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/17 14:11:41 by lsaiti            #+#    #+#             */
-/*   Updated: 2025/01/17 14:13:22 by lsaiti           ###   ########.fr       */
+/*   Updated: 2025/01/18 12:52:20 by lsaiti           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -35,7 +35,8 @@ char	*strcpy_no_nl(t_game *game, char *source, char *dest, int size)
 			dest[i] = source[i];
 		else
 		{
-			if (source[i] == 'N' || source[i] == 'W' || source[i] == 'S' || source[i] == 'E')
+			if (source[i] == 'N' || source[i] == 'W' || source[i] == 'S'
+				|| source[i] == 'E')
 				game->player->direction = source[i];
 			dest[i] = '0';
 		}
